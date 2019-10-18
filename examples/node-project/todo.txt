@@ -1,0 +1,1 @@
+// @todo add example of a node project importing the library, adding its own svg icons using node.fs

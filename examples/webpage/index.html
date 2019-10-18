@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>leaflet-vector-markers - webpage loading example</title>
+
+    <!-- normalize.css v8.0.1 -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+    />
+
+    <!-- Font Awesome v5.8.1 -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      crossorigin="anonymous"
+    />
+
+    <!-- Load Leaflet v1.4.0 -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+      integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+      integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+      crossorigin=""
+    ></script>
+
+    <!-- Leaflet Vector Markers -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../../dist/leaflet-vector-markers.css"
+    />
+    <script
+      type="application/javascript"
+      src="../../dist/leaflet-vector-markers.js"
+    ></script>
+  </head>
+  <style>
+    #mapContainer {
+      height: 100vh;
+      width: 100vw;
+    }
+  </style>
+  <body>
+    <div id="mapContainer"></div>
+  </body>
+  <script type="application/javascript">
+
+    /* -------------------------------------------------------------------------- */
+    /* (1) Create your custom markers
+    /* -------------------------------------------------------------------------- */
+
+    const customSvgPinProperties = {
+      pin: {
+        viewBox: "0 0 384 512",
+        path: "M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0z"
+      }
+    };
+
+    const redCoffeeMarker = L.VectorMarkers.icon({
+      iconName: "coffee",
+      markerColor: "red"
+    });
+
+    const greenCarMarker = L.VectorMarkers.icon({
+      iconName: "car",
+      iconColor: "black",
+      markerColor: "#B4FB87"
+    });
+
+    /**
+     * Example of a custom sized pin. Note the explicit control over the
+     * `iconSize` and `iconFontSize`.
+     *
+     * Note that you may or may not have to also adjust the popup anchor
+     * position depending on the change in size.
+     */
+    const customMarkerWithHomeIcon = L.VectorMarkers.icon({
+      iconColor: "white", // any valid property for css `color` attribute
+      iconFontSize: 24,
+      iconSize: [50, 60],
+      popupAnchor: [10, -40],
+
+      doesMarkerHaveShadow: true,
+      markerColor: "rgb(50, 150, 200)", // any valid property for css `color` attribute
+      markerClasses: ["custom-marker-style"],
+      markerPinPath: customSvgPinProperties.pin.path,
+      markerPinViewBox: customSvgPinProperties.pin.viewBox
+    });
+
+    /* -------------------------------------------------------------------------- */
+    /* (2) Instantiate Leaflet map and add your custom markers
+    /* -------------------------------------------------------------------------- */
+
+    const mapContainer = document.getElementById("mapContainer");
+    const coords = [48.15491, 11.54183];
+    const initialZoom = 18;
+
+    const map = L.map(mapContainer).setView(coords, initialZoom);
+
+    L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      minZoom: 5
+    }).addTo(map);
+
+    L.marker(coords, { icon: redCoffeeMarker, draggable: true })
+      .addTo(map)
+      .bindPopup("red coffee marker");
+
+    L.marker([48.155, 11.543], { icon: greenCarMarker, draggable: true })
+      .addTo(map)
+      .bindPopup("green car marker");
+
+    L.marker([48.1545, 11.5425], {
+      icon: customMarkerWithHomeIcon,
+      draggable: true
+    })
+      .addTo(map)
+      .bindPopup(
+        "this marker uses a custom SVG for the pin and has increased marker pin and icon sizes"
+      );
+
+  </script>
+</html>
